@@ -20,7 +20,6 @@ context "BitPacker" do
     asserts("correct packing") do
         topic.data.boolean = false
         topic.data.number = 2
-
         topic.to_i == 4
     end
 end

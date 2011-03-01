@@ -1,7 +1,6 @@
 # encoding: utf-8
 # (c) 2011 Martin Kozák (martinkozak@martinkozak.net)
 
-require "hashie/mash"
 require "lookup-hash/frozen"
 
 class BitPacker
@@ -20,6 +19,12 @@ class BitPacker
     #
     
     BYTESIZE = 8
+    
+    ##
+    # Holds resultant data structure.
+    #
+    
+    @struct
     
     ##
     # Holds type stack.
@@ -131,6 +136,7 @@ class BitPacker
     def add(name, type, length = 1)
         @stack << [name, type, @length, length]
         @length += length
+        @struct = nil
     end
     
     ##
@@ -149,23 +155,26 @@ class BitPacker
     
     ##
     # Returns structure analyze.
-    # @return [Hashie::Mash] mash with the packed data
+    # @return [Class] struct with the packed data
     #
     
     def data
         if @data.nil?
-            @data = Hashie::Mash::new
+            values = [ ]
+            
             @stack.each do |name, type, position, length|
                 rel_pos = @length - position - length
                 value = @raw & __mask(rel_pos, length)
                 
                 case type
                     when :boolean
-                        @data[name] = value > 0
+                        values << (value > 0)
                     when :number
-                        @data[name] = value >> rel_pos
+                        values << (value >> rel_pos)
                 end
             end
+            
+            @data = __struct::new(*values)
         end
         
         return @data
@@ -201,7 +210,7 @@ class BitPacker
     end
 
     
-    private 
+    protected 
     
     ##
     # Generates mask.
@@ -219,6 +228,19 @@ class BitPacker
         mask = mask << position
 
         return mask
+    end
+    
+    ##
+    # Returns data struct.
+    #
+    
+    def __struct
+        if @struct.nil?
+            members = @stack.map { |i| i[0] }
+            @struct = Struct::new(*members)
+        end
+        
+        return @struct
     end
     
 end
