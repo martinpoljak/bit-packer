@@ -1,0 +1,26 @@
+#!/usr/bin/ruby
+# encoding: utf-8
+# (c) 2011 Martin Kozák (martinkozak@martinkozak.net)
+
+$:.push("./lib")
+require "bit-packer"
+require "riot"
+
+context "BitPacker" do
+    setup do 
+        BitPacker::new(7) do
+            number (:number) {2}
+            boolean :boolean
+        end
+    end
+    
+    asserts("correct unpacking") do
+        (topic.data.boolean == true) and (topic.data.number == 3)
+    end
+    asserts("correct packing") do
+        topic.data.boolean = false
+        topic.data.number = 2
+
+        topic.to_i == 4
+    end
+end
