@@ -33,12 +33,6 @@ class BitPacker
     @stack
     
     ##
-    # Holds stack in compiled form.
-    #
-    
-    @compiled
-    
-    ##
     # Holds data.
     #
     
@@ -93,7 +87,7 @@ class BitPacker
     #   end
     #
     # @param [Proc] block block with declaration
-    # @see {TYPES}
+    # @see TYPES
     #
     
     def declare(&block)
@@ -128,15 +122,15 @@ class BitPacker
     # Adds declaration.
     # 
     # @param [Symbol] name name of the entry
-    # @param [Symbol] data type of the entry
+    # @param [Symbol] type type of the entry
     # @param [Integer] length length of the entry in bits
     # @return [Integer] new length of the packed data
     #
     
     def add(name, type, length = 1)
         @stack << [name, type, @length, length]
-        @length += length
         @struct = nil
+        @length += length
     end
     
     ##
@@ -208,6 +202,8 @@ class BitPacker
         
         return result
     end
+    
+    alias :to_int :to_i
 
     
     protected 
