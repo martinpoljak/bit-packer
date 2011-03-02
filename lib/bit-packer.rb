@@ -204,6 +204,29 @@ class BitPacker
     end
     
     alias :to_int :to_i
+    
+    ##
+    # Returns size in bits.
+    #
+    # @return [Integer] size in bits
+    # @since 0.1.1
+    #
+    
+    def bitsize
+        @length
+    end
+    
+    ##
+    # Returns size in bytes. It means number of bits rounded to number
+    # of bytes according to {BYTESIZE}.
+    #
+    # @return [Integer] size in bytes
+    # @since 0.1.1
+    #
+    
+    def bytesize
+        (@length.to_f / 8).ceil
+    end
 
     
     protected 
