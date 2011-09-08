@@ -1,7 +1,7 @@
 # encoding: utf-8
 # (c) 2011 Martin Kozák (martinkozak@martinkozak.net)
 
-require "lookup-hash/frozen"
+require "set"
 
 class BitPacker
     
@@ -9,7 +9,7 @@ class BitPacker
     # Holds types index.
     #
     
-    TYPES = Frozen::LookupHash[
+    TYPES = Set::new [
         :number,
         :boolean
     ]
