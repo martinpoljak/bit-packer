@@ -1,19 +1,19 @@
 #!/usr/bin/ruby
 # encoding: utf-8
-# (c) 2011 Martin Kozák (martinkozak@martinkozak.net)
+# (c) 2011 - 2015 Martin Poljak (martin@poljak.cz)
 
 $:.push("./lib")
 require "bit-packer"
 require "riot"
 
 context "BitPacker" do
-    setup do 
+    setup do
         BitPacker::new(7) do
             number (:number) {2}
             boolean :boolean
         end
     end
-    
+
     asserts("correct unpacking") do
         (topic.data.boolean == true) and (topic.data.number == 3)
     end
